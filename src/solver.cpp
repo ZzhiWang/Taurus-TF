@@ -508,26 +508,26 @@ void graph::initPivotMDSPosition(int p){
 
     std::cout<<"compute pivotMDS"<<std::endl;
     PivotMDS(nodes,pivot.size(),n,sp,pivot);
-    // float maxx=0,minx=100000000000,maxy=0,miny=10000000000;
+    float maxx=0,minx=100000000000,maxy=0,miny=10000000000;
 
-    // for(int i=0;i<nodes.size();i++){
-    //     if(nodes[i].x>maxx) maxx = nodes[i].x;
-    //     if(nodes[i].x<minx) minx = nodes[i].x;
-    //     if(nodes[i].y>maxy) maxy = nodes[i].y;
-    //     if(nodes[i].y<miny) miny = nodes[i].y;
-    // }
-    // float lenth=max(maxx-minx,maxy-miny);
-    // float lenth_x=maxx-minx,lenth_y=maxy-miny;
-    // for(int i=0;i<nodes.size();i++){
-    //     nodes[i].x-=minx;
-    //     nodes[i].y-=miny;
-    // }
-    // for(int i=0;i<nodes.size();i++){
-    //     nodes[i].x/=lenth_x;
-    //     nodes[i].y/=lenth_y;
-    //    // nodes[i].x*=100.0f;
-    //     //nodes[i].y*=100.0f;
-    // }
+    for(int i=0;i<nodes.size();i++){
+        if(nodes[i].x>maxx) maxx = nodes[i].x;
+        if(nodes[i].x<minx) minx = nodes[i].x;
+        if(nodes[i].y>maxy) maxy = nodes[i].y;
+        if(nodes[i].y<miny) miny = nodes[i].y;
+    }
+    float lenth=max(maxx-minx,maxy-miny);
+    float lenth_x=maxx-minx,lenth_y=maxy-miny;
+    for(int i=0;i<nodes.size();i++){
+        nodes[i].x-=minx;
+        nodes[i].y-=miny;
+    }
+    for(int i=0;i<nodes.size();i++){
+        nodes[i].x/=lenth_x;
+        nodes[i].y/=lenth_y;
+       // nodes[i].x*=100.0f;
+        //nodes[i].y*=100.0f;
+    }
 }
 void graph::initNode(int n) {
     nodes.resize(n);

@@ -246,7 +246,46 @@ void Layout(graph &g,vector<force> f){
         }
     }
 }
+void MaxentLayout(graph &g,int k_neigh){
+    //g.initPosition();
+    g.solveDij();
+    //para pa_maxent(1, 1, -2, 1, -1, 0, 2);
+    force pa_maxent2(0, -0.01, 1, 0);
+    force pa_maxent3(0, -0.0016, 1.8, 0);//for tree
+    std::vector<force> f;
+    f.push_back(force(2,1,1,2));
+    f.push_back(force(2, -1,0,1));
+    if(!g.power_law_graph()){
+        f.push_back(pa_maxent2);
+        g.alphaDecay=0.1;
+    }else{
+        f.push_back(pa_maxent3);
+        g.alphaDecay=0.001;
+    }
 
+    int t_max = 200;
+   
+    int num_of_node=g.nodes.size();
+    for(int _i=0;_i<num_of_node;_i++){
+        vector<merge_cons> temp_cons(num_of_node);
+        g.append_cons.push_back(temp_cons);
+    }
+    cout<<"append_cons_size="<<g.append_cons.size()<<endl;
+    g.append_S_range(k_neigh,f[0]);
+    //g.append_E_range(f[0]);
+    //g.append_E_range(f[1]);
+    g.append_S_range(k_neigh,f[1]);
+    g.initPivotMDSPosition(200);
+    g.append_BH_range2(f[2]);
+
+    g.preSolveBH2();
+    g.preSolveSGD2(0.01, t_max, 42,1.0f);
+    
+    for (int iter = 0; iter < t_max; iter++) {
+        g.solveSGD2(iter);
+        g.solveBH2(iter);
+    }
+}
 void t_Layout(graph &g,vector<t_force> f){
     //if(num!=f.size()){cout<<"paremeter error!"; return;}
     int num=f.size();
